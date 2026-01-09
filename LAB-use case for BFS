@@ -1,0 +1,100 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyNxqi9Xv+ETGiZP8JLMmZjg",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/ABISEK0001/Lab-works-/blob/main/LAB-use%20case%20for%20BFS\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "ll3KchYJ8aAw",
+        "outputId": "7b8a2ed0-342f-4095-8ce1-f4b518dde890"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "BFS Traversal Path: ['A', 'B', 'C', 'D', 'E', 'F']\n",
+            "Shortest Distances from A: {'A': 0, 'B': 1, 'C': 1, 'D': 2, 'E': 2, 'F': 2}\n",
+            "Error: Start node 'Z' not found in the graph.\n"
+          ]
+        }
+      ],
+      "source": [
+        "from collections import deque\n",
+        "\n",
+        "def bfs(graph, start):\n",
+        "    if start not in graph:\n",
+        "        print(f\"Error: Start node '{start}' not found in the graph.\")\n",
+        "        return [], {}\n",
+        "\n",
+        "    visited = set()          # To keep track of visited nodes\n",
+        "    queue = deque([(start, 0)])   # Queue stores (node, distance)\n",
+        "    traversal_path = []      # To store the order of visited nodes\n",
+        "    distances = {node: -1 for node in graph} # To store distances, -1 means unvisited\n",
+        "\n",
+        "    visited.add(start)\n",
+        "    distances[start] = 0\n",
+        "    traversal_path.append(start)\n",
+        "\n",
+        "    while queue:\n",
+        "        node, dist = queue.popleft()\n",
+        "\n",
+        "        # Add all unvisited neighbors to the queue\n",
+        "        for neighbor in graph[node]:\n",
+        "            if neighbor not in visited:\n",
+        "                visited.add(neighbor)\n",
+        "                distances[neighbor] = dist + 1\n",
+        "                traversal_path.append(neighbor)\n",
+        "                queue.append((neighbor, dist + 1))\n",
+        "\n",
+        "    return traversal_path, distances\n",
+        "\n",
+        "# Graph representation using adjacency list\n",
+        "graph = {\n",
+        "    'A': ['B', 'C'],\n",
+        "    'B': ['A', 'D', 'E'],\n",
+        "    'C': ['A', 'F'],\n",
+        "    'D': ['B'],\n",
+        "    'E': ['B', 'F'],\n",
+        "    'F': ['C', 'E']\n",
+        "}\n",
+        "\n",
+        "# Call BFS starting from node 'A'\n",
+        "path, dists = bfs(graph, 'A')\n",
+        "print(\"BFS Traversal Path:\", path)\n",
+        "print(\"Shortest Distances from A:\", dists)\n",
+        "\n",
+        "# Example for a node not in graph\n",
+        "path_invalid, dists_invalid = bfs(graph, 'Z')\n"
+      ]
+    }
+  ]
+}
